@@ -54,31 +54,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.PageData"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.PageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -109,31 +97,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -161,31 +137,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -223,37 +187,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.PostResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -282,13 +234,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -333,31 +285,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.PageData"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.PageData"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -388,37 +328,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -446,31 +374,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -508,43 +424,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github_com_example_go-web-template_internal_dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -573,13 +477,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.Body"
+                            "$ref": "#/definitions/github_com_example_go-web-template_pkg_response.ErrorBody"
                         }
                     }
                 }
@@ -769,22 +673,15 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_example_go-web-template_pkg_response.Body": {
+        "github_com_example_go-web-template_pkg_response.ErrorBody": {
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "业务错误码，0 表示成功",
+                    "description": "业务错误码",
                     "type": "integer"
-                },
-                "data": {
-                    "description": "业务数据"
                 },
                 "message": {
                     "description": "提示信息",
-                    "type": "string"
-                },
-                "request_id": {
-                    "description": "请求 ID，便于排查",
                     "type": "string"
                 }
             }

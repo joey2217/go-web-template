@@ -2,12 +2,13 @@
 //
 // 错误码分段：
 //
-//	0      成功
 //	10xxx  通用 / 参数
 //	11xxx  认证鉴权
 //	12xxx  业务
 //	13xxx  限流
 //	50xxx  系统
+//
+// 成功响应不再携带业务码，详见 pkg/response。
 package apperror
 
 import (
@@ -18,8 +19,6 @@ import (
 
 // 业务错误码。
 const (
-	CodeOK = 0
-
 	CodeBadRequest   = 10001
 	CodeUnauthorized = 11001
 	CodeForbidden    = 11002

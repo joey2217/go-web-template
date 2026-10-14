@@ -30,9 +30,9 @@ func NewPostHandler(svc service.PostService) *PostHandler {
 //	@Accept		json
 //	@Produce	json
 //	@Param		body	body		dto.CreatePostRequest	true	"帖子信息"
-//	@Success	201		{object}	response.Body{data=dto.PostResponse}
-//	@Failure	400		{object}	response.Body
-//	@Failure	500		{object}	response.Body
+//	@Success	201		{object}	dto.PostResponse
+//	@Failure	400		{object}	response.ErrorBody
+//	@Failure	500		{object}	response.ErrorBody
 //	@Router		/api/v1/posts [post]
 func (h *PostHandler) Create(c *gin.Context) {
 	log := logger.FromGin(c)
@@ -61,9 +61,9 @@ func (h *PostHandler) Create(c *gin.Context) {
 //	@Param		page_size	query		int		false	"每页数量，默认 20，最大 100"
 //	@Param		keyword		query		string	false	"标题/内容关键字"
 //	@Param		status		query		int		false	"状态：0 草稿，1 已发布"
-//	@Success	200			{object}	response.Body{data=response.PageData}
-//	@Failure	400			{object}	response.Body
-//	@Failure	500			{object}	response.Body
+//	@Success	200			{object}	response.PageData
+//	@Failure	400			{object}	response.ErrorBody
+//	@Failure	500			{object}	response.ErrorBody
 //	@Router		/api/v1/posts [get]
 func (h *PostHandler) List(c *gin.Context) {
 	var query dto.ListPostsQuery
@@ -85,9 +85,9 @@ func (h *PostHandler) List(c *gin.Context) {
 //	@Tags		posts
 //	@Produce	json
 //	@Param		id	path		string	true	"帖子 ID"
-//	@Success	200	{object}	response.Body{data=dto.PostResponse}
-//	@Failure	404	{object}	response.Body
-//	@Failure	500	{object}	response.Body
+//	@Success	200	{object}	dto.PostResponse
+//	@Failure	404	{object}	response.ErrorBody
+//	@Failure	500	{object}	response.ErrorBody
 //	@Router		/api/v1/posts/{id} [get]
 func (h *PostHandler) Get(c *gin.Context) {
 	resp, err := h.svc.Get(c.Request.Context(), c.Param("id"))
@@ -106,10 +106,10 @@ func (h *PostHandler) Get(c *gin.Context) {
 //	@Produce	json
 //	@Param		id		path		string					true	"帖子 ID"
 //	@Param		body	body		dto.UpdatePostRequest	true	"帖子信息"
-//	@Success	200		{object}	response.Body{data=dto.PostResponse}
-//	@Failure	400		{object}	response.Body
-//	@Failure	404		{object}	response.Body
-//	@Failure	500		{object}	response.Body
+//	@Success	200		{object}	dto.PostResponse
+//	@Failure	400		{object}	response.ErrorBody
+//	@Failure	404		{object}	response.ErrorBody
+//	@Failure	500		{object}	response.ErrorBody
 //	@Router		/api/v1/posts/{id} [put]
 func (h *PostHandler) Update(c *gin.Context) {
 	var req dto.UpdatePostRequest
@@ -132,8 +132,8 @@ func (h *PostHandler) Update(c *gin.Context) {
 //	@Produce	json
 //	@Param		id	path	string	true	"帖子 ID"
 //	@Success	204	"No Content"
-//	@Failure	404	{object}	response.Body
-//	@Failure	500	{object}	response.Body
+//	@Failure	404	{object}	response.ErrorBody
+//	@Failure	500	{object}	response.ErrorBody
 //	@Router		/api/v1/posts/{id} [delete]
 func (h *PostHandler) Delete(c *gin.Context) {
 	if err := h.svc.Delete(c.Request.Context(), c.Param("id")); err != nil {

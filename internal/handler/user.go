@@ -30,10 +30,10 @@ func NewUserHandler(svc service.UserService) *UserHandler {
 //	@Accept		json
 //	@Produce	json
 //	@Param		body	body		dto.CreateUserRequest	true	"用户信息"
-//	@Success	201		{object}	response.Body{data=dto.UserResponse}
-//	@Failure	400		{object}	response.Body
-//	@Failure	409		{object}	response.Body
-//	@Failure	500		{object}	response.Body
+//	@Success	201		{object}	dto.UserResponse
+//	@Failure	400		{object}	response.ErrorBody
+//	@Failure	409		{object}	response.ErrorBody
+//	@Failure	500		{object}	response.ErrorBody
 //	@Router		/api/v1/users [post]
 func (h *UserHandler) Create(c *gin.Context) {
 	log := logger.FromGin(c)
@@ -62,9 +62,9 @@ func (h *UserHandler) Create(c *gin.Context) {
 //	@Param		page_size	query		int		false	"每页数量，默认 20，最大 100"
 //	@Param		keyword		query		string	false	"用户名/邮箱/昵称关键字"
 //	@Param		status		query		int		false	"状态：0 正常，1 禁用"
-//	@Success	200			{object}	response.Body{data=response.PageData}
-//	@Failure	400			{object}	response.Body
-//	@Failure	500			{object}	response.Body
+//	@Success	200			{object}	response.PageData
+//	@Failure	400			{object}	response.ErrorBody
+//	@Failure	500			{object}	response.ErrorBody
 //	@Router		/api/v1/users [get]
 func (h *UserHandler) List(c *gin.Context) {
 	var query dto.ListUsersQuery
@@ -86,9 +86,9 @@ func (h *UserHandler) List(c *gin.Context) {
 //	@Tags		users
 //	@Produce	json
 //	@Param		id	path		string	true	"用户 ID"
-//	@Success	200	{object}	response.Body{data=dto.UserResponse}
-//	@Failure	404	{object}	response.Body
-//	@Failure	500	{object}	response.Body
+//	@Success	200	{object}	dto.UserResponse
+//	@Failure	404	{object}	response.ErrorBody
+//	@Failure	500	{object}	response.ErrorBody
 //	@Router		/api/v1/users/{id} [get]
 func (h *UserHandler) Get(c *gin.Context) {
 	resp, err := h.svc.Get(c.Request.Context(), c.Param("id"))
@@ -107,11 +107,11 @@ func (h *UserHandler) Get(c *gin.Context) {
 //	@Produce	json
 //	@Param		id		path		string					true	"用户 ID"
 //	@Param		body	body		dto.UpdateUserRequest	true	"用户信息（仅传需要修改的字段）"
-//	@Success	200		{object}	response.Body{data=dto.UserResponse}
-//	@Failure	400		{object}	response.Body
-//	@Failure	404		{object}	response.Body
-//	@Failure	409		{object}	response.Body
-//	@Failure	500		{object}	response.Body
+//	@Success	200		{object}	dto.UserResponse
+//	@Failure	400		{object}	response.ErrorBody
+//	@Failure	404		{object}	response.ErrorBody
+//	@Failure	409		{object}	response.ErrorBody
+//	@Failure	500		{object}	response.ErrorBody
 //	@Router		/api/v1/users/{id} [put]
 func (h *UserHandler) Update(c *gin.Context) {
 	var req dto.UpdateUserRequest
@@ -134,8 +134,8 @@ func (h *UserHandler) Update(c *gin.Context) {
 //	@Produce	json
 //	@Param		id	path	string	true	"用户 ID"
 //	@Success	204	"No Content"
-//	@Failure	404	{object}	response.Body
-//	@Failure	500	{object}	response.Body
+//	@Failure	404	{object}	response.ErrorBody
+//	@Failure	500	{object}	response.ErrorBody
 //	@Router		/api/v1/users/{id} [delete]
 func (h *UserHandler) Delete(c *gin.Context) {
 	if err := h.svc.Delete(c.Request.Context(), c.Param("id")); err != nil {
