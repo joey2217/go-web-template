@@ -40,6 +40,7 @@ func New(deps Deps) *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 
 	registerHealth(r, deps)
+	registerStatic(r)
 
 	if deps.Config.Swagger.Enabled {
 		registerSwagger(r)

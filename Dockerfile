@@ -31,6 +31,7 @@ WORKDIR /app
 COPY --from=builder /out/server /app/server
 COPY --from=builder /src/config /app/config
 COPY --from=builder /src/migrations /app/migrations
+COPY --from=builder /src/public /app/public
 
 EXPOSE 8080
 
