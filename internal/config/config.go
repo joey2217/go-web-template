@@ -23,6 +23,7 @@ type Config struct {
 	Redis     Redis     `mapstructure:"redis"`
 	RateLimit RateLimit `mapstructure:"ratelimit"`
 	Cache     Cache     `mapstructure:"cache"`
+	Metrics   Metrics   `mapstructure:"metrics"`
 	Swagger   Swagger   `mapstructure:"swagger"`
 	Log       Log       `mapstructure:"log"`
 	CORS      CORS      `mapstructure:"cors"`
@@ -84,6 +85,12 @@ type Cache struct {
 	Enabled    bool          `mapstructure:"enabled"`
 	KeyPrefix  string        `mapstructure:"key_prefix"`
 	DefaultTTL time.Duration `mapstructure:"default_ttl"`
+}
+
+// Metrics Prometheus 指标配置。
+type Metrics struct {
+	Enabled bool   `mapstructure:"enabled"`
+	Path    string `mapstructure:"path"`
 }
 
 // Swagger 文档开关配置。
@@ -218,6 +225,9 @@ func setDefaults(v *viper.Viper) {
 	v.SetDefault("cache.enabled", true)
 	v.SetDefault("cache.key_prefix", "gwt:")
 	v.SetDefault("cache.default_ttl", "5m")
+
+	v.SetDefault("metrics.enabled", true)
+	v.SetDefault("metrics.path", "/metrics")
 
 	v.SetDefault("swagger.enabled", true)
 

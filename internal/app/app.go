@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/prometheus/client_golang/prometheus"
 	goredis "github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -20,6 +21,7 @@ import (
 	"github.com/example/go-web-template/pkg/cache"
 	"github.com/example/go-web-template/pkg/database"
 	"github.com/example/go-web-template/pkg/logger"
+	"github.com/example/go-web-template/pkg/metrics"
 	appredis "github.com/example/go-web-template/pkg/redis"
 )
 
@@ -78,12 +80,31 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 	}
 
 	// 构造缓存：未启用或 Redis 不可用时回退到 Noop，业务侧无感。
+	// 启用 metrics 时再包一层 Instrumented，自动上报 cache_operations_total。
 	var c cache.Cache = cache.Noop{}
 	if cfg.Cache.Enabled && rdb != nil {
-		c = cache.NewRedis(cache.RedisConfig{
+		inner := cache.NewRedis(cache.RedisConfig{
 			Client:    rdb,
 			KeyPrefix: cfg.Cache.KeyPrefix,
 		})
+		if cfg.Metrics.Enabled {
+			c = cache.NewInstrumented(inner)
+		} else {
+			c = inner
+		}
+	}
+
+	// Prometheus 注册表（独立实例，避免污染 DefaultRegisterer）。
+	// 运行时指标（go_* / process_*）由 NewRegistry 内部注册；
+	// DB 连接池采集器在能拿到 sql.DB 时附加。
+	var metricsReg *prometheus.Registry
+	if cfg.Metrics.Enabled {
+		metricsReg = metrics.NewRegistry()
+		if sqlDB, err := db.DB(); err == nil {
+			if col := metrics.NewDBPoolCollector(sqlDB); col != nil {
+				metricsReg.MustRegister(col)
+			}
+		}
 	}
 
 	// 依赖装配：handler 聚合体（内部完成 repository → service → handler 串联）。
@@ -95,6 +116,7 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 		DB:       db,
 		Redis:    rdb,
 		Handlers: handlers,
+		Metrics:  metricsReg,
 	})
 
 	server := &http.Server{

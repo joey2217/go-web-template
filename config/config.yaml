@@ -44,6 +44,10 @@ cache:
   key_prefix: gwt
   default_ttl: 5m
 
+metrics:
+  enabled: true
+  path: /metrics
+
 swagger:
   enabled: true # 生产环境建议置为 false
 
