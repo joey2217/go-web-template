@@ -1,0 +1,25 @@
+app:
+  env: prod
+  debug: false
+
+database:
+  sslmode: require
+  log_level: error
+
+ratelimit:
+  enabled: true
+  rate: 50
+  burst: 100
+  fail_open: false # 生产环境 Redis 异常时拒绝请求
+
+swagger:
+  enabled: false
+
+log:
+  level: info
+  format: json
+  output: stdout
+
+cors:
+  allow_origins:
+    - "https://example.com"

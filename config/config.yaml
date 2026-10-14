@@ -1,0 +1,55 @@
+app:
+  name: go-web-template
+  env: dev # dev | test | prod
+  debug: true
+
+server:
+  host: 0.0.0.0
+  port: 8080
+  read_timeout: 15s
+  write_timeout: 15s
+  shutdown_timeout: 10s
+
+database:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  name: app
+  sslmode: disable
+  max_open_conns: 50
+  max_idle_conns: 10
+  conn_max_lifetime: 1h
+  log_level: warn # silent | error | warn | info
+
+redis:
+  addr: localhost:6379
+  password: ""
+  db: 0
+  pool_size: 10
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+auth:
+  enabled: false # 鉴权开关，默认关闭（Auth 中间件直接放行）
+
+ratelimit:
+  enabled: true
+  key_prefix: rl
+  rate: 20 # 每 window 允许的请求数
+  burst: 40 # 突发上限
+  window: 1s # 统计窗口
+  fail_open: true # Redis 不可用时是否放行
+
+swagger:
+  enabled: true # 生产环境建议置为 false
+
+log:
+  level: info # debug | info | warn | error
+  format: json # json | console
+  output: stdout # stdout 或文件路径
+
+cors:
+  allow_origins:
+    - "*"

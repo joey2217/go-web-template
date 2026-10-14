@@ -1,0 +1,20 @@
+# 编译产物
+/bin/
+/tmp/
+*.exe
+*.out
+*.test
+
+# 环境与本地配置
+.env
+config/config.local.yaml
+
+# 测试覆盖
+coverage.out
+coverage.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
