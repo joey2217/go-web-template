@@ -17,6 +17,7 @@ import (
 	"github.com/example/go-web-template/internal/config"
 	"github.com/example/go-web-template/internal/handler"
 	"github.com/example/go-web-template/internal/router"
+	"github.com/example/go-web-template/pkg/cache"
 	"github.com/example/go-web-template/pkg/database"
 	"github.com/example/go-web-template/pkg/logger"
 	appredis "github.com/example/go-web-template/pkg/redis"
@@ -58,9 +59,9 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 		return nil, err
 	}
 
-	// Redis 仅在需要限流时连接，避免无 Redis 环境下无法启动。
+	// Redis 在需要限流或缓存时连接，两者都关时也不连（避免无 Redis 环境下无法启动）。
 	var rdb *goredis.Client
-	if cfg.RateLimit.Enabled {
+	if cfg.RateLimit.Enabled || cfg.Cache.Enabled {
 		rdb, err = appredis.New(ctx, appredis.Config{
 			Addr:         cfg.Redis.Addr,
 			Password:     cfg.Redis.Password,
@@ -76,8 +77,17 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 		}
 	}
 
+	// 构造缓存：未启用或 Redis 不可用时回退到 Noop，业务侧无感。
+	var c cache.Cache = cache.Noop{}
+	if cfg.Cache.Enabled && rdb != nil {
+		c = cache.NewRedis(cache.RedisConfig{
+			Client:    rdb,
+			KeyPrefix: cfg.Cache.KeyPrefix,
+		})
+	}
+
 	// 依赖装配：handler 聚合体（内部完成 repository → service → handler 串联）。
-	handlers := handler.NewHandlers(db)
+	handlers := handler.NewHandlers(db, c)
 
 	engine := router.New(router.Deps{
 		Config:   cfg,

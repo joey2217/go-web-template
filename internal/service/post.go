@@ -4,6 +4,7 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -12,6 +13,7 @@ import (
 	"github.com/example/go-web-template/internal/model"
 	"github.com/example/go-web-template/internal/repository"
 	"github.com/example/go-web-template/pkg/apperror"
+	"github.com/example/go-web-template/pkg/cache"
 	"github.com/example/go-web-template/pkg/response"
 )
 
@@ -25,13 +27,22 @@ type PostService interface {
 }
 
 type postService struct {
-	repo repository.PostRepository
+	repo  repository.PostRepository
+	cache cache.Cache
 }
 
 // NewPostService 创建帖子业务实现。
-func NewPostService(repo repository.PostRepository) PostService {
-	return &postService{repo: repo}
+// c 可以是 cache.Noop{}（未启用缓存时），方法内无需判 nil。
+func NewPostService(repo repository.PostRepository, c cache.Cache) PostService {
+	return &postService{repo: repo, cache: c}
 }
+
+const (
+	postCachePrefix = "post:"
+	postCacheTTL    = 5 * time.Minute
+)
+
+func postCacheKey(uid uuid.UUID) string { return postCachePrefix + uid.String() }
 
 func (s *postService) Create(ctx context.Context, req *dto.CreatePostRequest) (*dto.PostResponse, error) {
 	post := &model.Post{
@@ -46,16 +57,26 @@ func (s *postService) Create(ctx context.Context, req *dto.CreatePostRequest) (*
 	return dto.NewPostResponse(post), nil
 }
 
+// Get 按 ID 查询帖子，cache-aside：先查缓存，未命中回源并回填。
+// 缓存失败 fail-open，降级到 DB，不影响业务可用性。
 func (s *postService) Get(ctx context.Context, id string) (*dto.PostResponse, error) {
 	uid, err := parseID(id)
 	if err != nil {
 		return nil, err
 	}
+	key := postCacheKey(uid)
+
+	if cached, ok, err := cache.Get[dto.PostResponse](ctx, s.cache, key); err == nil && ok {
+		return &cached, nil
+	}
+
 	post, err := s.repo.GetByID(ctx, uid)
 	if err != nil {
 		return nil, mapNotFound(err, "帖子不存在")
 	}
-	return dto.NewPostResponse(post), nil
+	resp := dto.NewPostResponse(post)
+	_ = cache.Set[dto.PostResponse](ctx, s.cache, key, *resp, postCacheTTL)
+	return resp, nil
 }
 
 func (s *postService) List(ctx context.Context, query *dto.ListPostsQuery) (*response.PageData, error) {
@@ -100,6 +121,9 @@ func (s *postService) Update(ctx context.Context, id string, req *dto.UpdatePost
 	if err != nil {
 		return nil, mapNotFound(err, "帖子不存在")
 	}
+
+	// 写后失效缓存（best-effort）。
+	_ = s.cache.Delete(ctx, postCacheKey(uid))
 	return dto.NewPostResponse(updated), nil
 }
 
@@ -111,6 +135,7 @@ func (s *postService) Delete(ctx context.Context, id string) error {
 	if err := s.repo.Delete(ctx, uid); err != nil {
 		return mapNotFound(err, "帖子不存在")
 	}
+	_ = s.cache.Delete(ctx, postCacheKey(uid))
 	return nil
 }
 

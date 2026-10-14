@@ -22,6 +22,7 @@ type Config struct {
 	Database  Database  `mapstructure:"database"`
 	Redis     Redis     `mapstructure:"redis"`
 	RateLimit RateLimit `mapstructure:"ratelimit"`
+	Cache     Cache     `mapstructure:"cache"`
 	Swagger   Swagger   `mapstructure:"swagger"`
 	Log       Log       `mapstructure:"log"`
 	CORS      CORS      `mapstructure:"cors"`
@@ -76,6 +77,13 @@ type RateLimit struct {
 	Burst     int           `mapstructure:"burst"`
 	Window    time.Duration `mapstructure:"window"`
 	FailOpen  bool          `mapstructure:"fail_open"`
+}
+
+// Cache 业务缓存配置（基于 Redis）。
+type Cache struct {
+	Enabled    bool          `mapstructure:"enabled"`
+	KeyPrefix  string        `mapstructure:"key_prefix"`
+	DefaultTTL time.Duration `mapstructure:"default_ttl"`
 }
 
 // Swagger 文档开关配置。
@@ -206,6 +214,10 @@ func setDefaults(v *viper.Viper) {
 	v.SetDefault("ratelimit.burst", 40)
 	v.SetDefault("ratelimit.window", "1s")
 	v.SetDefault("ratelimit.fail_open", true)
+
+	v.SetDefault("cache.enabled", true)
+	v.SetDefault("cache.key_prefix", "gwt:")
+	v.SetDefault("cache.default_ttl", "5m")
 
 	v.SetDefault("swagger.enabled", true)
 

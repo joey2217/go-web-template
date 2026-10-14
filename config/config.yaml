@@ -39,6 +39,11 @@ ratelimit:
   window: 1s # 统计窗口
   fail_open: true # Redis 不可用时是否放行
 
+cache:
+  enabled: true
+  key_prefix: gwt
+  default_ttl: 5m
+
 swagger:
   enabled: true # 生产环境建议置为 false
 
