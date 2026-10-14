@@ -18,10 +18,13 @@ services:
 
   redis:
     image: redis:8-alpine
+    # 开发用默认密码 redis；生产请改成强密码（可通过 .env 注入 REDIS_PASSWORD
+    # 并把下面写死改成 ${REDIS_PASSWORD}，app 的 APP_REDIS_PASSWORD 同步对齐）
+    command: ["redis-server", "--requirepass", "redis"]
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "redis", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -51,6 +54,7 @@ services:
       APP_DATABASE_NAME: app
       APP_DATABASE_SSLMODE: disable
       APP_REDIS_ADDR: redis:6379
+      APP_REDIS_PASSWORD: redis
       APP_LOG_FORMAT: json
       APP_SWAGGER_ENABLED: "false"
     ports:
