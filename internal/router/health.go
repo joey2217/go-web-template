@@ -10,6 +10,10 @@ import (
 
 // registerHealth 注册存活与就绪探针。
 func registerHealth(r *gin.Engine, deps Deps) {
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
 	r.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})

@@ -142,6 +142,9 @@ definitions:
       message:
         description: 提示信息
         type: string
+      request_id:
+        description: 请求 ID，便于排查
+        type: string
     type: object
   github_com_example_go-web-template_pkg_response.PageData:
     properties:

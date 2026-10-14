@@ -683,6 +683,10 @@ const docTemplate = `{
                 "message": {
                     "description": "提示信息",
                     "type": "string"
+                },
+                "request_id": {
+                    "description": "请求 ID，便于排查",
+                    "type": "string"
                 }
             }
         },

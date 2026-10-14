@@ -62,10 +62,10 @@ migrate-force: ## 强制设置版本，用法：make migrate-force version=1
 	migrate -path migrations -database "$(DATABASE_URL)" force $(version)
 
 docker-up: ## 启动依赖与应用
-	docker compose -f deployments/docker-compose.yml up -d --build
+	docker compose up -d --build
 
 docker-down: ## 停止并移除容器
-	docker compose -f deployments/docker-compose.yml down
+	docker compose down
 
 docker-logs: ## 查看应用日志
-	docker compose -f deployments/docker-compose.yml logs -f app
+	docker compose logs -f app
