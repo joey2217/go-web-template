@@ -7,12 +7,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/example/go-web-template/internal/dto"
-	"github.com/example/go-web-template/internal/model"
 	"github.com/google/uuid"
 	"gorm.io/cli/gorm/typed"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+
+	"github.com/example/go-web-template/internal/dto"
+	"github.com/example/go-web-template/internal/model"
 )
 
 func Post[T any](db *gorm.DB, opts ...clause.Expression) _PostInterface[T] {

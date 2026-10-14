@@ -11,7 +11,7 @@
 | 类型 | 纯 RESTful API 服务（只输出 JSON，无前端页面） |
 | 使用方式 | 作为后端 / 微服务模板复制后按业务扩展 |
 | 语言 | **Go 1.26** |
-| 鉴权 | **预留 `Auth` 中间件，默认放行**（不实现具体鉴权逻辑） |
+| 鉴权 | **预留 `Auth` 中间件，默认放行**（无配置项，代码内 TODO 待实现） |
 | 限流 | **基于 Redis 的分布式限流** |
 | API 文档 | **Swagger（swaggo 注解生成 OpenAPI + Swagger UI）** |
 | 配置 | Viper 加载 YAML + 环境变量覆盖，多环境 |
@@ -82,7 +82,7 @@ go-web-template
 │   │   ├── recovery.go             # panic 恢复
 │   │   ├── cors.go                 # 跨域
 │   │   ├── ratelimit.go            # 限流（Redis）
-│   │   ├── auth.go                 # 鉴权占位（默认放行）
+│   │   ├── auth.go                 # 鉴权占位（默认放行，TODO 待实现）
 │   │   └── error.go                # 统一错误渲染
 │   ├── handler                     # HTTP 层 (Controller)
 │   │   └── post.go
@@ -198,8 +198,6 @@ redis:
   dial_timeout: 5s
   read_timeout: 3s
   write_timeout: 3s
-auth:
-  enabled: false            # 鉴权开关，默认关闭（中间件直接放行）
 ratelimit:
   enabled: true
   key_prefix: rl            # Redis key 前缀
@@ -262,17 +260,16 @@ cors:
 
 ## 8. 鉴权设计（预留）
 
-v1 **不实现具体鉴权逻辑**，只保留中间件扩展点，默认放行。
+v1 **不实现具体鉴权逻辑**，只保留中间件扩展点，默认放行；**无任何配置项**。
 
 **`middleware/auth.go`**：
 
-- `Auth(enabled bool)` 中间件挂载在 `/api/v1` 受保护分组上。
-- 当 `auth.enabled=false`（默认）时：直接 `c.Next()`，不做任何校验。
-- 当 `auth.enabled=true` 时：预留校验入口（当前为空实现，接入后在此校验凭证、解析身份）。
+- `Auth()` 中间件挂载在 `/api/v1` 受保护分组上，当前实现为直接 `c.Next()` 放行。
+- 真实鉴权逻辑以 `TODO` 标注在函数体内，接入时直接实现，无需新增配置。
 
 **预留约定**（后续接入时保持接口不变）：
 
-- 身份信息统一写入 `gin.Context`（如 `ctx.Set("userID", ...)`），业务层通过 helper 读取，不感知鉴权实现细节。
+- 身份信息统一写入 `gin.Context`（`ctx.Set(middleware.ContextKeyUserID, ...)`），业务层通过 `middleware.UserID(c)` 读取，不感知鉴权实现细节。
 - 未通过校验统一返回 401（业务码 `11001`）。
 - 后续可平滑接入 JWT / Session / API Key，均只需改 `middleware/auth.go`，handler/service 无需改动。
 - 限流维度可据此升级：鉴权关闭时按客户端 IP，鉴权开启后可按用户身份。
@@ -348,7 +345,7 @@ v1 **不实现具体鉴权逻辑**，只保留中间件扩展点，默认放行�
 | CORS | 跨域白名单 | 全局 |
 | ErrorHandler | 统一错误渲染 | 全局 |
 | RateLimit | Redis 分布式限流（超限 429 / 13001） | 敏感路由 |
-| Auth | 鉴权占位（`auth.enabled` 控制，默认放行） | `/api/v1` 受保护分组 |
+| Auth | 鉴权占位（无配置，默认放行） | `/api/v1` 受保护分组 |
 
 ---
 
@@ -360,7 +357,8 @@ v1 **不实现具体鉴权逻辑**，只保留中间件扩展点，默认放行�
 - 分页约定：入参 `page`(默认 1)、`page_size`(默认 20，上限 100)；响应 `{ list, total, page, page_size }`。
 - 时间返回 RFC3339 UTC；`Content-Type: application/json; charset=utf-8`。
 - 所有错误必须显式处理，禁止裸 `panic`；`context.Context` 从 handler 透传到 repository。
-- 提交前通过 `gofmt` / `goimports` / `golangci-lint`。
+- 提交前运行 `make fmt`（gofmt + goimports，本地包单独成组）与 `make lint`；CI 用 `make fmt-check` 卡格式。
+- 工具版本由 `go.mod` 的 `tool` 指令固定（`go tool goimports`），无需手动 `go install`。
 
 ---
 
@@ -378,7 +376,9 @@ v1 **不实现具体鉴权逻辑**，只保留中间件扩展点，默认放行�
 make run            # 本地运行
 make build          # 编译二进制
 make test           # 单元测试
-make lint           # golangci-lint
+make fmt            # 格式化代码 + 整理 import 分组（gofmt + goimports）
+make fmt-check      # 校验格式（CI 用，不修改文件）
+make lint           # golangci-lint（formatter 含 gofmt/goimports）
 make swagger        # 生成 Swagger 文档（swag init）
 make migrate-up     # 执行迁移
 make migrate-down   # 回滚一步

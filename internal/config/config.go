@@ -21,7 +21,6 @@ type Config struct {
 	Server    Server    `mapstructure:"server"`
 	Database  Database  `mapstructure:"database"`
 	Redis     Redis     `mapstructure:"redis"`
-	Auth      Auth      `mapstructure:"auth"`
 	RateLimit RateLimit `mapstructure:"ratelimit"`
 	Swagger   Swagger   `mapstructure:"swagger"`
 	Log       Log       `mapstructure:"log"`
@@ -67,11 +66,6 @@ type Redis struct {
 	DialTimeout  time.Duration `mapstructure:"dial_timeout"`
 	ReadTimeout  time.Duration `mapstructure:"read_timeout"`
 	WriteTimeout time.Duration `mapstructure:"write_timeout"`
-}
-
-// Auth 鉴权开关配置。
-type Auth struct {
-	Enabled bool `mapstructure:"enabled"`
 }
 
 // RateLimit 限流配置。
@@ -205,8 +199,6 @@ func setDefaults(v *viper.Viper) {
 	v.SetDefault("redis.dial_timeout", "5s")
 	v.SetDefault("redis.read_timeout", "3s")
 	v.SetDefault("redis.write_timeout", "3s")
-
-	v.SetDefault("auth.enabled", false)
 
 	v.SetDefault("ratelimit.enabled", true)
 	v.SetDefault("ratelimit.key_prefix", "rl")

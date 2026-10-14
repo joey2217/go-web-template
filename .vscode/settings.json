@@ -1,0 +1,29 @@
+{
+
+    "go.useLanguageServer": true,
+    "go.formatTool": "default",
+    // 保存时自动格式化 + 自动整理 import
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        },
+        "editor.insertSpaces": false,
+        "editor.tabSize": 4,
+        "files.eol": "\n"
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true
+    },
+
+    // 本地包单独成组：等价 goimports -local github.com/example/go-web-template
+    "gopls": {
+        "formatting.local": "github.com/example/go-web-template",
+        "formatting.gofmt-simplify": true
+    },
+
+    // 通用格式化
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+}

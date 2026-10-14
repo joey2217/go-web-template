@@ -1,10 +1,11 @@
 APP_NAME := go-web-template
 MAIN     := ./cmd/server
 BIN_DIR  := bin
+MODULE   := $(shell go list -m)
 
 DATABASE_URL ?= postgres://postgres:postgres@localhost:5432/app?sslmode=disable
 
-.PHONY: help deps run build test lint clean gen swagger \
+.PHONY: help deps run build test fmt fmt-check lint clean gen swagger \
         migrate-up migrate-down migrate-create migrate-force \
         docker-up docker-down docker-logs
 
@@ -23,6 +24,17 @@ build: ## 编译二进制到 bin/
 test: ## 单元测试
 	go test -race -cover ./...
 
+fmt: ## 格式化代码并整理 import 分组（gofmt + goimports）
+	go tool goimports -w -local $(MODULE) .
+
+fmt-check: ## 校验格式与 import 分组（CI 用，不修改文件）
+	@out=$$(go tool goimports -l -local $(MODULE) .); \
+	if [ -n "$$out" ]; then \
+		echo "以下文件格式或 import 不符合规范，请运行 make fmt："; \
+		echo "$$out"; \
+		exit 1; \
+	fi
+
 lint: ## 静态检查
 	golangci-lint run ./...
 
@@ -32,9 +44,10 @@ clean: ## 清理产物
 swagger: ## 生成 Swagger 文档
 	swag init -g cmd/server/main.go -o docs --parseDependency --parseInternal
 
-gen: ## 生成 GORM CLI 数据访问代码
+gen: ## 生成 GORM CLI 数据访问代码（生成后自动整理 import）
 	rm -rf internal/repository/gen
 	gorm gen -i internal/repository/dao -o internal/repository/gen
+	go tool goimports -w -local $(MODULE) internal/repository/gen
 
 migrate-up: ## 执行迁移
 	migrate -path migrations -database "$(DATABASE_URL)" up

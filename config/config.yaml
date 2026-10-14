@@ -31,9 +31,6 @@ redis:
   read_timeout: 3s
   write_timeout: 3s
 
-auth:
-  enabled: false # 鉴权开关，默认关闭（Auth 中间件直接放行）
-
 ratelimit:
   enabled: true
   key_prefix: rl

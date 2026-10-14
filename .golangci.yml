@@ -26,6 +26,13 @@ formatters:
   enable:
     - gofmt
     - goimports
+  settings:
+    gofmt:
+      simplify: true
+    goimports:
+      # 与 `make fmt`（goimports -local）保持一致：本地包单独成组
+      local-prefixes:
+        - github.com/example/go-web-template
 
 issues:
   exclude-rules:

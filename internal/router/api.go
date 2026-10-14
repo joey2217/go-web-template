@@ -13,7 +13,7 @@ func registerAPI(r *gin.Engine, deps Deps) {
 	// 受保护分组：先限流，再鉴权（鉴权默认放行）。
 	protected := v1.Group("")
 	protected.Use(middleware.RateLimit(deps.Config.RateLimit, deps.Redis, deps.Logger))
-	protected.Use(middleware.Auth(deps.Config.Auth))
+	protected.Use(middleware.Auth())
 
 	h := deps.Handlers
 

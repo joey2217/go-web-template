@@ -5,12 +5,13 @@ import (
 	"context"
 	"errors"
 
+	"gorm.io/gorm"
+
 	"github.com/example/go-web-template/internal/dto"
 	"github.com/example/go-web-template/internal/model"
 	"github.com/example/go-web-template/internal/repository"
 	"github.com/example/go-web-template/pkg/apperror"
 	"github.com/example/go-web-template/pkg/response"
-	"gorm.io/gorm"
 )
 
 // UserService 定义用户业务接口。
