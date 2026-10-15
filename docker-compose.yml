@@ -41,7 +41,7 @@ services:
       postgres:
         condition: service_healthy
 
-  app:
+  go-api:
     build:
       context: .
       dockerfile: Dockerfile
