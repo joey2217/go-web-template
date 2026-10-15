@@ -59,7 +59,13 @@ func New(deps Deps) *gin.Engine {
 	}
 
 	if deps.Metrics != nil {
-		registerMetrics(r, deps.Metrics, deps.Config.Metrics.Path)
+		registerMetrics(
+			r,
+			deps.Metrics,
+			deps.Config.Metrics.Path,
+			deps.Config.Metrics.Username,
+			deps.Config.Metrics.Password,
+		)
 	}
 
 	registerAPI(r, deps)

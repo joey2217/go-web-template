@@ -89,8 +89,10 @@ type Cache struct {
 
 // Metrics Prometheus 指标配置。
 type Metrics struct {
-	Enabled bool   `mapstructure:"enabled"`
-	Path    string `mapstructure:"path"`
+	Enabled  bool   `mapstructure:"enabled"`
+	Path     string `mapstructure:"path"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
 }
 
 // Swagger 文档开关配置。
@@ -228,6 +230,8 @@ func setDefaults(v *viper.Viper) {
 
 	v.SetDefault("metrics.enabled", true)
 	v.SetDefault("metrics.path", "/metrics")
+	v.SetDefault("metrics.username", "metrics")
+	v.SetDefault("metrics.password", "")
 
 	v.SetDefault("swagger.enabled", true)
 

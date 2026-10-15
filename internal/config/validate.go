@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Validate 校验关键配置项的合法性。
@@ -17,6 +18,14 @@ func (c *Config) Validate() error {
 	}
 	if c.Database.Name == "" {
 		errs = append(errs, errors.New("database.name 不能为空"))
+	}
+	if c.Metrics.Enabled {
+		if c.Metrics.Username == "" {
+			errs = append(errs, errors.New("启用 metrics 时 metrics.username 不能为空"))
+		}
+		if strings.TrimSpace(c.Metrics.Password) == "" {
+			errs = append(errs, errors.New("启用 metrics 时 metrics.password 不能为空"))
+		}
 	}
 	if c.RateLimit.Enabled {
 		if c.Redis.Addr == "" {

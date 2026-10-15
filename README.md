@@ -217,6 +217,7 @@ cors:
 
 - 环境变量映射：`APP_SERVER_PORT` → `server.port`（Viper `SetEnvPrefix("APP")` + `SetEnvKeyReplacer`）。
 - 敏感项（DB / Redis 密码）通过环境变量注入，**不提交仓库**。
+- 启用 metrics 时必须提供 `metrics.username` 和 `metrics.password`；Docker Compose 从本地 `.env` 读取 `GWT_METRICS_PASSWORD` 并注入 `APP_METRICS_PASSWORD`。生成和启动步骤见 [Prometheus 监控配置](../prometheus/README.md)。
 - 用 `-c ./config/config.local.yaml` 或 `CONFIG_FILE` 指定配置路径。
 
 ---
