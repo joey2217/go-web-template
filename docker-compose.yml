@@ -56,7 +56,7 @@ services:
       APP_REDIS_ADDR: redis:6379
       APP_REDIS_PASSWORD: redis
       APP_METRICS_USERNAME: metrics
-      APP_METRICS_PASSWORD: 269cfebacdf7f80c637a0466ea92d25fb7e55db5c5764006cf4dfa10c79c28bd
+      APP_METRICS_PASSWORD: metrics
       APP_LOG_FORMAT: json
       APP_SWAGGER_ENABLED: "false"
     ports:
